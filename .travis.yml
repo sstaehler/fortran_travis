@@ -5,11 +5,11 @@ dist: trusty
 sudo: required
 
 env:
-  - GFORTRAN_VERSION=4.8
-  - GFORTRAN_VERSION=4.9
-  - GFORTRAN_VERSION=5
-  - GFORTRAN_VERSION=6
-  
+  - GFORTRAN_VERSION=4.8 MPI_IMPL=openmpi
+  - GFORTRAN_VERSION=4.9 MPI_IMPL=openmpi
+  - GFORTRAN_VERSION=5 MPI_IMPL=openmpi
+  - GFORTRAN_VERSION=6 MPI_IMPL=openmpi
+
 addons:
   apt:
     sources:
@@ -21,11 +21,8 @@ addons:
       - gfortran-6
 
 before_install:
-
-# Install requirements for M.C. Kernel
-# - pip install --user cpp-coveralls
-# - sudo apt-get update -qq
-# - sudo apt-get install -qq gfortran libnetcdff5 libnetcdf-dev libfftw3-dev liblapack-dev libblas-dev openmpi-bin libopenmpi-dev
+  # Get OpenMPI
+- ./install_mpi.sh $TRAVIS_ROOT $MPI_IMPL 
 
 install:
 - gfortran-$GFORTRAN_VERSION -v
