@@ -70,13 +70,14 @@ case "$os" in
                 else
                     echo "MPICH installed..."
                     find $TRAVIS_ROOT -name mpiexec
+                    find $TRAVIS_ROOT -name mpif90
                     find $TRAVIS_ROOT -name mpicc
                 fi
                 ;;
             openmpi)
                 if [ ! -f "$TRAVIS_ROOT/bin/ompi_info" ]; then
                     wget --no-check-certificate -q http://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-1.10.1.tar.bz2
-                    tar -xjf http://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-1.10.1.tar.bz2
+                    tar -xjf openmpi-1.10.1.tar.bz2
                     cd openmpi-1.10.1
                     mkdir build && cd build
                     ../configure --prefix=$TRAVIS_ROOT CC=$PRK_CC CXX=$PRK_CXX FC=$PRK_FC
@@ -85,6 +86,7 @@ case "$os" in
                 else
                     echo "OpenMPI installed..."
                     find $TRAVIS_ROOT -name mpiexec
+                    find $TRAVIS_ROOT -name mpif90
                     find $TRAVIS_ROOT -name mpicc
                 fi
 
