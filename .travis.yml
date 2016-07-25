@@ -1,0 +1,32 @@
+language: generic
+
+# Use the trusty environment, since the netcdf packages in 12.04 are broken
+dist: trusty
+sudo: required
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gfortran-6
+
+before_install:
+
+# Install requirements for M.C. Kernel
+# - pip install --user cpp-coveralls
+# - sudo apt-get update -qq
+# - sudo apt-get install -qq gfortran libnetcdff5 libnetcdf-dev libfftw3-dev liblapack-dev libblas-dev openmpi-bin libopenmpi-dev
+
+install:
+- gfortran -v
+- gfortran hello_world.f90 -o hello_world.x
+
+script:
+- ./hello_world.x
+
+after_success:
+
+cache:
+  directories:
+    - $HOME/miniconda
