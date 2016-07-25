@@ -5,10 +5,14 @@ dist: trusty
 sudo: required
 
 env:
-  - GFORTRAN_VERSION=4.8 MPI_IMPL=openmpi
-  - GFORTRAN_VERSION=4.9 MPI_IMPL=openmpi
-  - GFORTRAN_VERSION=5 MPI_IMPL=openmpi
-  - GFORTRAN_VERSION=6 MPI_IMPL=openmpi
+  global:
+    MPI_IMPL=openmpi
+
+  matrix:
+    - GFORTRAN_VERSION=4.8
+    - GFORTRAN_VERSION=4.9
+    - GFORTRAN_VERSION=5 
+    - GFORTRAN_VERSION=6
 
 addons:
   apt:
@@ -21,15 +25,17 @@ addons:
       - gfortran-6
 
 before_install:
-  # Get OpenMPI
-- ./install_mpi.sh $TRAVIS_ROOT $MPI_IMPL 
+  - export TRAVIS_ROOT=$HOME/travis
+  - mkdir $TRAVIS_ROOT
+  # Get and install OpenMPI
+  - ./install_mpi.sh $TRAVIS_ROOT $MPI_IMPL 
 
 install:
-- gfortran-$GFORTRAN_VERSION -v
-- gfortran-$GFORTRAN_VERSION hello_world.f90 -o hello_world.x
+  - gfortran-$GFORTRAN_VERSION -v
+  - gfortran-$GFORTRAN_VERSION hello_world.f90 -o hello_world.x
 
 script:
-- ./hello_world.x
+  - ./hello_world.x
 
 after_success:
 
@@ -37,4 +43,4 @@ cache:
   apt: true
 
   directories:
-    - $HOME/miniconda
+    - $HOME/travis
