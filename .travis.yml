@@ -23,6 +23,10 @@ addons:
       - gfortran-4.9
       - gfortran-5
       - gfortran-6
+      - g++-4.8
+      - g++-4.9
+      - g++-5
+      - g++-6
 
 before_install:
   - export TRAVIS_ROOT=$HOME/travis
