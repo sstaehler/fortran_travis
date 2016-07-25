@@ -26,7 +26,7 @@ addons:
 
 before_install:
   - export TRAVIS_ROOT=$HOME/travis
-  - mkdir $TRAVIS_ROOT
+  - mkdir -p $TRAVIS_ROOT
   # Get and install OpenMPI
   - ./install_mpi.sh $TRAVIS_ROOT $MPI_IMPL 
 
