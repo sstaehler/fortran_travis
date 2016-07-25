@@ -4,11 +4,20 @@ language: generic
 dist: trusty
 sudo: required
 
+env:
+  - GFORTRAN_VERSION=4.8
+  - GFORTRAN_VERSION=4.9
+  - GFORTRAN_VERSION=5
+  - GFORTRAN_VERSION=6
+  
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
+      - gfortran-4.8
+      - gfortran-4.9
+      - gfortran-5
       - gfortran-6
 
 before_install:
@@ -19,8 +28,8 @@ before_install:
 # - sudo apt-get install -qq gfortran libnetcdff5 libnetcdf-dev libfftw3-dev liblapack-dev libblas-dev openmpi-bin libopenmpi-dev
 
 install:
-- gfortran -v
-- gfortran hello_world.f90 -o hello_world.x
+- gfortran-$GFORTRAN_VERSION -v
+- gfortran-$GFORTRAN_VERSION hello_world.f90 -o hello_world.x
 
 script:
 - ./hello_world.x
