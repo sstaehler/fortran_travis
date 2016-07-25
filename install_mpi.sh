@@ -8,6 +8,7 @@ set -x
 os=`uname`
 TRAVIS_ROOT="$1"
 MPI_IMPL="$2"
+GCCVERSION="$3"
 
 case "$os" in
     Darwin)
@@ -28,19 +29,20 @@ case "$os" in
         ;;
     Linux)
         echo "Linux"
-        case "$CC" in
-            gcc)
-                for gccversion in "-6" "-5" "-5.3" "-5.2" "-5.1" "-4.9" "-4.8" "-4.7" "-4.6" "" ; do
-                    if [ -f "`which gcc$gccversion`" ]; then
-                        export PRK_CC="gcc$gccversion"
-                        export PRK_CXX="g++$gccversion"
-                        export PRK_FC="gfortran$gccversion"
-                        echo "Found GCC: $PRK_CC"
-                        break
-                    fi
-                done
-                ;;
-        esac
+        export PRK_CC="gcc$GCCVERSION"
+        export PRK_CXX="g++$GCCVERSION"
+        export PRK_FC="gfortran$GCCVERSION"
+
+        # for gccversion in "-6" "-5" "-5.3" "-5.2" "-5.1" "-4.9" "-4.8" "-4.7" "-4.6" "" ; do
+        #     if [ -f "`which gcc$gccversion`" ]; then
+        #         export PRK_CC="gcc$gccversion"
+        #         export PRK_CXX="g++$gccversion"
+        #         export PRK_FC="gfortran$gccversion"
+        #         echo "Found GCC: $PRK_CC"
+        #         break
+        #     fi
+        # done
+
         case "$MPI_IMPL" in
             mpich)
                 if [ ! -f "$TRAVIS_ROOT/bin/mpichversion" ]; then
@@ -63,7 +65,6 @@ case "$os" in
                     ./autogen.sh
                     mkdir build ; cd build
                     ../configure --prefix=$TRAVIS_ROOT CC=$PRK_CC CXX=$PRK_CXX FC=$PRK_FC
-                    fi
                     make -j4
                     make install
                 else
@@ -78,11 +79,7 @@ case "$os" in
                     tar -xjf http://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-1.10.1.tar.bz2
                     cd openmpi-1.10.1
                     mkdir build && cd build
-                    if [ "x$MPI_FORTRAN" != "x1" ] ; then
-                        ../configure --prefix=$TRAVIS_ROOT CC=$PRK_CC CXX=$PRK_CXX --enable-mpi-fortran=none
-                    else
-                        ../configure --prefix=$TRAVIS_ROOT CC=$PRK_CC CXX=$PRK_CXX FC=$PRK_FC
-                    fi
+                    ../configure --prefix=$TRAVIS_ROOT CC=$PRK_CC CXX=$PRK_CXX FC=$PRK_FC
                     make -j4
                     make install
                 else
