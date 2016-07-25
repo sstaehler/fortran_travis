@@ -34,5 +34,7 @@ script:
 after_success:
 
 cache:
+  apt: true
+
   directories:
     - $HOME/miniconda
