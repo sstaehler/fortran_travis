@@ -32,8 +32,9 @@ before_install:
   - export TRAVIS_ROOT=$HOME/travis
   - mkdir -p $TRAVIS_ROOT
   # Get and install OpenMPI
-  - ./install_mpi.sh $TRAVIS_ROOT $MPI_IMPL -$GFORTRAN_VERSION
-  - ./install_fftw.sh $TRAVIS_ROOT -$GFORTRAN_VERSION
+  - ./install_mpi.sh $TRAVIS_ROOT $MPI_IMPL $GFORTRAN_VERSION
+  - ./install_fftw.sh $TRAVIS_ROOT $GFORTRAN_VERSION
+  - ./install_netcdf.sh $TRAVIS_ROOT $GFORTRAN_VERSION
 
 install:
   - gfortran-$GFORTRAN_VERSION -v

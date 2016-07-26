@@ -29,19 +29,9 @@ case "$os" in
         ;;
     Linux)
         echo "Linux"
-        export PRK_CC="gcc$GCCVERSION"
-        export PRK_CXX="g++$GCCVERSION"
-        export PRK_FC="gfortran$GCCVERSION"
-
-        # for gccversion in "-6" "-5" "-5.3" "-5.2" "-5.1" "-4.9" "-4.8" "-4.7" "-4.6" "" ; do
-        #     if [ -f "`which gcc$gccversion`" ]; then
-        #         export PRK_CC="gcc$gccversion"
-        #         export PRK_CXX="g++$gccversion"
-        #         export PRK_FC="gfortran$gccversion"
-        #         echo "Found GCC: $PRK_CC"
-        #         break
-        #     fi
-        # done
+        export PRK_CC="gcc-$GCCVERSION"
+        export PRK_CXX="g++-$GCCVERSION"
+        export PRK_FC="gfortran-$GCCVERSION"
 
         case "$MPI_IMPL" in
             mpich)
@@ -80,7 +70,12 @@ case "$os" in
                     tar -xjf openmpi-1.10.1.tar.bz2
                     cd openmpi-1.10.1
                     mkdir build && cd build
-                    ../configure --prefix=$TRAVIS_ROOT CC=$PRK_CC CXX=$PRK_CXX FC=$PRK_FC
+                    ../configure --prefix=$TRAVIS_ROOT CC=$PRK_CC CXX=$PRK_CXX FC=$PRK_FC \
+                      --disable-java --disable-cxx --without-verbs --without-fca --without-mxm \
+                      --without-ucx --without-portals4 --without-psm --without-psm2 \
+                      --without-alps --without-munge --without-sge --without-loadleveler \
+                      --without-tm --without-lsf --without-slurm --without-pvfs2 --without-plfs \
+                      --without-cuda --disable-oshmem --disable-mpi-io  --disable-io-romio
                     make -j4
                     make install
                 else
