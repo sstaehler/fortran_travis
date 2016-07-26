@@ -14,26 +14,32 @@ env:
     - GFORTRAN_VERSION=5 
     - GFORTRAN_VERSION=6
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gfortran-4.8
-      - gfortran-4.9
-      - gfortran-5
-      - gfortran-6
-      - g++-4.8
-      - g++-4.9
-      - g++-5
-      - g++-6
+# addons:
+#   apt:
+#     sources:
+#       - ubuntu-toolchain-r-test
+#     packages:
+#       - gfortran-4.8
+#       - gfortran-4.9
+#       - gfortran-5
+#       - gfortran-6
+#       - g++-4.8
+#       - g++-4.9
+#       - g++-5
+#       - g++-6
 
 before_install:
+  - sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+  - sudo -E apt-get -yq update &>> ~/apt-get-update.log
+  - sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes install 
+    gfortran-$GFORTRAN_VERSION g++-$GFORTRAN_VERSION
   - export TRAVIS_ROOT=$HOME/travis
   - mkdir -p $TRAVIS_ROOT
   # Get and install OpenMPI
   - ./install_mpi.sh $TRAVIS_ROOT $MPI_IMPL $GFORTRAN_VERSION
+  # Get and install FFTW3
   - ./install_fftw.sh $TRAVIS_ROOT $GFORTRAN_VERSION
+  # Get and install NetCDF4
   - ./install_netcdf.sh $TRAVIS_ROOT $GFORTRAN_VERSION
 
 install:
