@@ -1,58 +1,17 @@
-language: generic
-
-# Use the trusty environment, since the netcdf packages in 12.04 are broken
-dist: trusty
-sudo: required
-
+language: c
 env:
   global:
-    MPI_IMPL=openmpi
-
-  matrix:
-    - GFORTRAN_VERSION=4.8
-    - GFORTRAN_VERSION=4.9
-    - GFORTRAN_VERSION=5 
-    - GFORTRAN_VERSION=6
-
-# addons:
-#   apt:
-#     sources:
-#       - ubuntu-toolchain-r-test
-#     packages:
-#       - gfortran-4.8
-#       - gfortran-4.9
-#       - gfortran-5
-#       - gfortran-6
-#       - g++-4.8
-#       - g++-4.9
-#       - g++-5
-#       - g++-6
-
+    secure: TcHADJQbewe6IDV3FEtDrj7uGheBuus5fpPgdubb/khWxVgQKoqemG235eauSEL5dwJXOS1hAAiZ8BcJScay+zEwREeVuI1Jxp/NXCuOtXqah1I6L7aGVx6bCLBtsN2r/vlC/y/aaH8hxsa5qUd6dfnOnGq/oeBf3bU1ESZM1IH8egDAR5/Pc3q33pWjVY8a2BfP1RAUP/LqxJkrCpKFNtVPE7ENhAH64W18T3f9+Ugxwhaqy4cYySHK0DuhkmqkXU9/wEzqXBrq2SAtpD5HTMoD/2EqHUzTsH8x8eRHLzwC85sNx99MavXZT5ckkPCoBFfYHESVQNnkn0cEiA/j+g896jsrV31nc3jYxJI2zx92uOE6TNkKUW8ySesR9EWi8p0RpG6rfhmNEoAXKABtHBKg7P8tWUMbktS3VbNlkT5Ae0nowB5AFgPN8S4TmO5PTkFJbotueNUYHTlSR7ZhITsOjPx4DoUybmfh7TOp1z95zsr5ZOmVxQHbOv5Q0MA5sgxzDAlW4CrD/7z0LCotYrFcKZeAUxDk9ffl1ZJyp9ifNPvvOCpImCtgOMqw8ub24JoUrRvXmJpHq5Ht5l9Q/2CD5hIlXWR9Sl/x1bQxSqVb0hsqBEm86Wki0TrtCGDn22DmM08N/PdLfdmZcRY7KwUawlyjMn4oKz8oHCuw+OY=
 before_install:
-  - sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
-  - sudo -E apt-get -yq update &>> ~/apt-get-update.log
-  - sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes install 
-    gfortran-$GFORTRAN_VERSION g++-$GFORTRAN_VERSION
-  - export TRAVIS_ROOT=$HOME/travis
-  - mkdir -p $TRAVIS_ROOT
-  # Get and install OpenMPI
-  - ./TRAVIS/install_mpi.sh $TRAVIS_ROOT $MPI_IMPL $GFORTRAN_VERSION
-  # Get and install FFTW3
-  - ./TRAVIS/install_fftw.sh $TRAVIS_ROOT $GFORTRAN_VERSION
-  # Get and install NetCDF4
-  - ./TRAVIS/install_netcdf.sh $TRAVIS_ROOT $GFORTRAN_VERSION
-
+  - ./install-icc.sh --components ifort
+  - source ~/.bashrc
 install:
-  - gfortran-$GFORTRAN_VERSION -v
-  - gfortran-$GFORTRAN_VERSION hello_world.f90 -o hello_world.x
-
+  - ifort hello_world.f90 -o hello_world.x
 script:
   - ./hello_world.x
-
-after_success:
-
-cache:
-  apt: true
-
-  directories:
-    - $HOME/travis
+after_script:
+- ! '[[ ! -z "${INTEL_INSTALL_PATH}" ]] && uninstall_intel_software'
+notifications:
+  email:
+    on_success: change
+    on_failure: change
