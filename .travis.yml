@@ -3,7 +3,7 @@ env:
   global:
     secure: TcHADJQbewe6IDV3FEtDrj7uGheBuus5fpPgdubb/khWxVgQKoqemG235eauSEL5dwJXOS1hAAiZ8BcJScay+zEwREeVuI1Jxp/NXCuOtXqah1I6L7aGVx6bCLBtsN2r/vlC/y/aaH8hxsa5qUd6dfnOnGq/oeBf3bU1ESZM1IH8egDAR5/Pc3q33pWjVY8a2BfP1RAUP/LqxJkrCpKFNtVPE7ENhAH64W18T3f9+Ugxwhaqy4cYySHK0DuhkmqkXU9/wEzqXBrq2SAtpD5HTMoD/2EqHUzTsH8x8eRHLzwC85sNx99MavXZT5ckkPCoBFfYHESVQNnkn0cEiA/j+g896jsrV31nc3jYxJI2zx92uOE6TNkKUW8ySesR9EWi8p0RpG6rfhmNEoAXKABtHBKg7P8tWUMbktS3VbNlkT5Ae0nowB5AFgPN8S4TmO5PTkFJbotueNUYHTlSR7ZhITsOjPx4DoUybmfh7TOp1z95zsr5ZOmVxQHbOv5Q0MA5sgxzDAlW4CrD/7z0LCotYrFcKZeAUxDk9ffl1ZJyp9ifNPvvOCpImCtgOMqw8ub24JoUrRvXmJpHq5Ht5l9Q/2CD5hIlXWR9Sl/x1bQxSqVb0hsqBEm86Wki0TrtCGDn22DmM08N/PdLfdmZcRY7KwUawlyjMn4oKz8oHCuw+OY=
 before_install:
-  - ./install-icc.sh --components ifort
+  - command -v ifort >/dev/null || ./install-icc.sh --components ifort 
   - source ~/.bashrc
 install:
   - ifort hello_world.f90 -o hello_world.x
@@ -11,7 +11,15 @@ script:
   - ./hello_world.x
 after_script:
 - ! '[[ ! -z "${INTEL_INSTALL_PATH}" ]] && uninstall_intel_software'
+
 notifications:
   email:
     on_success: change
     on_failure: change
+
+cache:
+  apt: true
+
+  directories:
+    - $HOME/travis
+    - $HOME/.bashrc
