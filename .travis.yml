@@ -43,11 +43,10 @@ before_install:
   - ./TRAVIS/install_netcdf.sh $TRAVIS_ROOT $GFORTRAN_VERSION
 
 install:
-  - gfortran-$GFORTRAN_VERSION -v
-  - gfortran-$GFORTRAN_VERSION hello_world.f90 -o hello_world.x
+  - make
 
 script:
-  - ./hello_world.x
+  - make check
 
 after_success:
 
