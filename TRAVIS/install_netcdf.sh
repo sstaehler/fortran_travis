@@ -1,13 +1,24 @@
 #!/bin/bash
 
 TRAVIS_ROOT="$1"
-GCCVERSION="$2"
+COMPILER="$2"
+GCCVERSION="$3"
 
-export CC=gcc-$GCCVERSION
-export FC=gfortran-$GCCVERSION
 export TRAVIS_ROOT=$TRAVIS_ROOT
+
+case "$COMPILER" in
+    icc)
+      export FC=ifort
+      export CC=icc
+      export CPPFLAGS="-I$TRAVIS_ROOT/include"
+      ;;
+    gcc)
+      export FC=gfortran-$GCCVERSION
+      export CC=gcc-$GCCVERSION
+      export CPPFLAGS="-I$TRAVIS_ROOT/include -DgFortran"
+      ;;
+esac
 export LDFLAGS=-L$TRAVIS_ROOT/lib
-export CPPFLAGS="-I$TRAVIS_ROOT/include -DgFortran"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TRAVIS_ROOT/lib 
 set -e
 
@@ -77,11 +88,3 @@ else
     echo "NetCDF-fortran installed..."
     find $TRAVIS_ROOT -name nf-config
 fi
-
-
-# echo 'You might want to put these to lines in your Makefile to make sure, the'
-# echo 'libraries just compiled are used:'
-# echo ''
-# echo 'LIBS = -lm  -L $(TRAVIS_ROOT)/lib -lnetcdff -Wl,-rpath,$(TRAVIS_ROOT)/lib'
-# echo 'INCLUDE = -I $(TRAVIS_ROOT)/include'
-
