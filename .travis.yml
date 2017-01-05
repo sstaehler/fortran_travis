@@ -1,63 +1,32 @@
 language: generic
-
-# Use the trusty environment, since the netcdf packages in 12.04 are broken
 dist: trusty
 sudo: required
-
 env:
   global:
-    MPI_IMPL=openmpi
-  secure: TcHADJQbewe6IDV3FEtDrj7uGheBuus5fpPgdubb/khWxVgQKoqemG235eauSEL5dwJXOS1hAAiZ8BcJScay+zEwREeVuI1Jxp/NXCuOtXqah1I6L7aGVx6bCLBtsN2r/vlC/y/aaH8hxsa5qUd6dfnOnGq/oeBf3bU1ESZM1IH8egDAR5/Pc3q33pWjVY8a2BfP1RAUP/LqxJkrCpKFNtVPE7ENhAH64W18T3f9+Ugxwhaqy4cYySHK0DuhkmqkXU9/wEzqXBrq2SAtpD5HTMoD/2EqHUzTsH8x8eRHLzwC85sNx99MavXZT5ckkPCoBFfYHESVQNnkn0cEiA/j+g896jsrV31nc3jYxJI2zx92uOE6TNkKUW8ySesR9EWi8p0RpG6rfhmNEoAXKABtHBKg7P8tWUMbktS3VbNlkT5Ae0nowB5AFgPN8S4TmO5PTkFJbotueNUYHTlSR7ZhITsOjPx4DoUybmfh7TOp1z95zsr5ZOmVxQHbOv5Q0MA5sgxzDAlW4CrD/7z0LCotYrFcKZeAUxDk9ffl1ZJyp9ifNPvvOCpImCtgOMqw8ub24JoUrRvXmJpHq5Ht5l9Q/2CD5hIlXWR9Sl/x1bQxSqVb0hsqBEm86Wki0TrtCGDn22DmM08N/PdLfdmZcRY7KwUawlyjMn4oKz8oHCuw+OY=
-
-
+  - MPI_IMPL=openmpi
+  - secure: jPn338gUvjcqVpZpua1DIJoRBsnyg3aKOzhI2gXUY0vek98n+rZWS5RVvCyjQsMLJWeH+0JefUppA87ThceD2VIa/ujbzxElVrMkAKBd+ncOUbjePLX91Ro0E3KnQdzsWBThyhO1QXBnN0HtEl+29NoXc6tVz5oAR6OuH03RgpWJkfMXC1WDmXj9YK/bW07Rr957D93tkG6mF3oLl4RHhjCBU3ptHcXMzyRSq5AXccg0Biei7sJzPXOWjSerJmdTO2oHtAl6yeDTo1WIczlkA7n0fpg6xxNGaep/jchPPf+iezGuq78MBU0fE1RoV1YKC+hH90bcQxha74Ga4JYTfOqMVJdVZ5dfq5M8IgR3tBzWiIWCeJHx4Mvs9smVywOHys1ZzKRwN+mS8XrtKHU9dGsfjRcp3Hnzi8xub8lsZfHe2Ara3lfsj4GLiwC7jWKHcyT3Y4Qt7OGHFxmAVdzpPJww09OvrWySHZgt/ypLbFUXVg+CUF70PO9wN/va1uS7NZrjPED9QrZjCXrcA1/rbFOQr+nf7WomhlZM3SLmMx9/Xpo6N0wQD/B7jv7M/bc/JLrXd6iffuWO2BWQ3jS43Srw+JPOMwyrcr7YNlQLgMKEhzLowqcJVL4PYJv9h8UHHj5a1avHQyjnB+fDRosJiqgEob6B+Awmt0U8lanDT14=
   matrix:
-    - COMPILER=gcc
-      GFORTRAN_VERSION=4.8
-    - COMPILER=gcc
-      GFORTRAN_VERSION=4.9
-    - COMPILER=gcc
-      GFORTRAN_VERSION=5 
-    - COMPILER=gcc
-      GFORTRAN_VERSION=6
-    - COMPILER=icc
-
-# addons:
-#   apt:
-#     sources:
-#       - ubuntu-toolchain-r-test
-#     packages:
-#       - gfortran-4.8
-#       - gfortran-4.9
-#       - gfortran-5
-#       - gfortran-6
-#       - g++-4.8
-#       - g++-4.9
-#       - g++-5
-#       - g++-6
-
+  - COMPILER=gcc GFORTRAN_VERSION=4.8
+  - COMPILER=gcc GFORTRAN_VERSION=4.9
+  - COMPILER=gcc GFORTRAN_VERSION=5
+  - COMPILER=gcc GFORTRAN_VERSION=6
+  - COMPILER=icc
 before_install:
-  - export TRAVIS_ROOT=$HOME/travis
-  - mkdir -p $TRAVIS_ROOT
-  # Get and install the compiler
-  - ./TRAVIS/install_compiler.sh $TRAVIS_ROOT $COMPILER $GFORTRAN_VERSION
-  # Get and install OpenMPI
-  - ./TRAVIS/install_mpi.sh $TRAVIS_ROOT $MPI_IMPL $COMPILER $GFORTRAN_VERSION
-  # Get and install FFTW3
-  - ./TRAVIS/install_fftw.sh $TRAVIS_ROOT $COMPILER $GFORTRAN_VERSION
-  # Get and install NetCDF4
-  - ./TRAVIS/install_netcdf.sh $TRAVIS_ROOT $COMPILER $GFORTRAN_VERSION
-
+- export TRAVIS_ROOT=$HOME/travis
+- mkdir -p $TRAVIS_ROOT
+- ./TRAVIS/install_compiler.sh $TRAVIS_ROOT $COMPILER $GFORTRAN_VERSION
+- ./TRAVIS/install_mpi.sh $TRAVIS_ROOT $MPI_IMPL $COMPILER $GFORTRAN_VERSION
+- ./TRAVIS/install_fftw.sh $TRAVIS_ROOT $COMPILER $GFORTRAN_VERSION
+- ./TRAVIS/install_netcdf.sh $TRAVIS_ROOT $COMPILER $GFORTRAN_VERSION
 install:
-  - $FC -v
-  - $FC hello_world.f90 -o hello_world.x
-
+- $FC -v
+- $FC hello_world.f90 -o hello_world.x
 script:
-  - ./hello_world.x
-
-after_success:
-
+- ./hello_world.x
+after_script:
+    - '[[ ! -z "${INTEL_INSTALL_PATH}" ]] && uninstall_intel_software'
+after_success: 
 cache:
   apt: true
-
   directories:
-    - $HOME/travis
+  - $HOME/travis
