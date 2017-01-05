@@ -5,13 +5,13 @@ env:
 before_install:
     #- source ~/.bashrc
     #- command -v ifort >/dev/null || ./install-icc.sh --components ifort,mpi,icc
-  - ./install-icc.sh --components ifort,mpi,icc
+  - ./install-icc.sh --components ifort,mpi,icc,mkl
   - echo "alias mpif90='mpiifort' >> ~/.bashrc"
   - source ~/.bashrc
 
 install:
   - ls $HOME/travis
-  - ls $HOME/intel
+  - ls $HOME/intel/bin
   - ifort hello_world.f90 -o hello_world.x
   - mpiifort hello_world.f90 -o hello_world_mpi.x
   - mpif90 hello_world.f90 -o hello_world_mpi.x
