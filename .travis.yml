@@ -11,6 +11,7 @@ install:
   - chmod +x ./gdrive
 script:
   - ./gdrive list
+  - ./gdrive download 0B2O7p0iBm8A9SWk1WjJZUDR5dVU
   - echo $COMPILER $GFORTRAN_VERSION
 after_script:
 after_success: 
