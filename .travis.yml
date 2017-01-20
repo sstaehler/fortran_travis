@@ -44,5 +44,3 @@ cache:
   apt: true
   directories:
   - $HOME/travis
-  - $HOME/Library/Caches/Homebrew
-  - /usr/local/Cellar/
