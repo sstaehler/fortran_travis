@@ -15,8 +15,7 @@ install:
   - echo "$TRAVIS_OS_NAME"
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       echo "On OSX";
-      brew install gfortran;
-      brew install openmpi --with-fortran;
+      brew install openmpi 
       brew install fftw --with-fortran;
       brew tap homebrew/science;
       brew install netcdf --with-fortran;
@@ -43,3 +42,5 @@ cache:
   apt: true
   directories:
   - $HOME/travis
+  - $HOME/Library/Caches/Homebrew
+  - /usr/local/Cellar/
