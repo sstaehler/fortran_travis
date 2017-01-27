@@ -5,9 +5,9 @@ brew update
 if [ -f "brew_cache.tar.gz" ]; then
   echo "Found Brew Cache, linking"
   tar zxf brew_cache.tar.gz --directory /usr/local/Cellar
-  brew link open-mpi gmp libmpc isl gcc || { brew install open-mpi }
-  brew link fftw || { brew install fftw --with-fortran }
-  brew link szip hdf5 netcdf || { brew tap homebrew/science && brew install netcdf --with-fortran }
+  brew link open-mpi gmp libmpc isl gcc || brew install open-mpi
+  brew link fftw || brew install fftw --with-fortran
+  brew link szip hdf5 netcdf || brew tap homebrew/science && brew install netcdf --with-fortran 
 else
   echo "Did not find Brew Cache, download and reinstall"
   brew install open-mpi 
