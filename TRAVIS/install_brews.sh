@@ -8,7 +8,8 @@ brew update
 #  brew link gmp libmpc gcc szip hdf5 openmpi fftw #isc
 #
 # else
-  echo "Did not find Brew Cache, download and reinstall"
+
+echo "Did not find Brew Cache, download and reinstall"
 brew install openmpi 
 brew install fftw --with-fortran;
 brew tap homebrew/science;
